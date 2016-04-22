@@ -71,20 +71,27 @@ public class UserInput : MonoBehaviour {
 	}
 
 	private void LeftMouseClick() {
-		Deselect();
+		//Deselect();
 	    if(player.hud.MouseInBounds()) {
 	        GameObject hitObject = FindHitObject();
 	        Vector3 hitPoint = FindHitPoint();
 	        if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
 	            if(player.SelectedObject){ 
 	            	player.SelectedObject.MouseClick(hitObject, hitPoint, player);
-	            }else if(hitObject.name!="Ground") {
-	                WorldObject worldObject = hitObject.transform.root.GetComponent< WorldObject >();
+	            }
+	            WorldObject selected = player.SelectedObject;
+	            Deselect();
+	            if(hitObject.name!="Ground") {
+	                WorldObject worldObject = hitObject.transform.parent.GetComponent< WorldObject >();
 	                if(worldObject) {
 	                    //we already know the player has no selected object
 	                    player.SelectedObject = worldObject;
 	                    worldObject.SetSelection(true, player.hud.GetPlayingArea());
 	                }
+	            }
+	            else{
+	            	player.SelectedObject=selected;
+	            	player.SelectedObject.SetSelection(true, player.hud.GetPlayingArea());
 	            }
 	        }
 	    }
