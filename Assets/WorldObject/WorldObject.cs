@@ -89,4 +89,12 @@ public class WorldObject : MonoBehaviour {
 	protected virtual void DrawSelectionBox(Rect selectBox) {
 	    GUI.Box(selectBox, "");
 	}
+
+	public bool IsOwnedBy(Player owner) {
+	    if(player && player.Equals(owner)) {
+	        return true;
+	    } else {
+	        return false;
+	    }
+	}
 }
