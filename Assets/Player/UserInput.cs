@@ -110,10 +110,6 @@ public class UserInput : MonoBehaviour {
 	    }
 	}
 
-	private void RightMouseClick(){
-		Deselect();
-	}
-
 
 	private void MouseHover() {
 	    if(player.hud.MouseInBounds()) {
@@ -123,6 +119,15 @@ public class UserInput : MonoBehaviour {
     	}
 	}
 
+	private void RightMouseClick() {
+	    if(player.hud.MouseInBounds() && !Input.GetKey(KeyCode.LeftAlt) && player.SelectedObject) {
+	        if(player.IsFindingBuildingLocation()) {
+	            player.CancelBuildingPlacement();
+	        } else {
+	            Deselect();
+	        }
+	    }
+	}
 
 
 }

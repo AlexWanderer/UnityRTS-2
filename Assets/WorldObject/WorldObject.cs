@@ -27,6 +27,7 @@ public class WorldObject : MonoBehaviour {
 	 
 	protected virtual void Start () {
 	    SetPlayer();
+	    if(player) SetTeamColor();
 	}
 
 	public void SetPlayer() {
@@ -151,5 +152,10 @@ public class WorldObject : MonoBehaviour {
 
 	public Bounds GetSelectionBounds() {
 		return selectionBounds;
+	}
+
+	protected void SetTeamColor() {
+	    TeamColor[] teamColors = GetComponentsInChildren< TeamColor >();
+	    foreach(TeamColor teamColor in teamColors) teamColor.GetComponent<Renderer>().material.color = player.teamColor;
 	}
 }

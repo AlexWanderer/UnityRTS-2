@@ -16,6 +16,8 @@ public class Player : MonoBehaviour {
 	private Building tempBuilding;
 	private Unit tempCreator;
 	private bool findingPlacement = false;
+
+	public Color teamColor;
 	
 	void Awake() {
 	    resources = InitResourceList();
@@ -157,5 +159,12 @@ public class Player : MonoBehaviour {
 	    tempBuilding.SetColliders(true);
 	    tempCreator.SetBuilding(tempBuilding);
 	    tempBuilding.StartConstruction();
+	}
+
+	public void CancelBuildingPlacement() {
+	    findingPlacement = false;
+	    Destroy(tempBuilding.gameObject);
+	    tempBuilding = null;
+	    tempCreator = null;
 	}
 }
