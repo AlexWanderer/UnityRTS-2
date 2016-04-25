@@ -158,4 +158,6 @@ public class WorldObject : MonoBehaviour {
 	    TeamColor[] teamColors = GetComponentsInChildren< TeamColor >();
 	    foreach(TeamColor teamColor in teamColors) teamColor.GetComponent<Renderer>().material.color = player.teamColor;
 	}
+
+    public virtual bool IsActive { get { return true; } }
 }

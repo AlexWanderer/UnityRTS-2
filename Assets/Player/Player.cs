@@ -139,8 +139,9 @@ public class Player : MonoBehaviour {
 	    corners.Add(Camera.main.WorldToScreenPoint(new Vector3(cx-ex,cy-ey,cz+ez)));
 	    corners.Add(Camera.main.WorldToScreenPoint(new Vector3(cx-ex,cy+ey,cz-ez)));
 	    corners.Add(Camera.main.WorldToScreenPoint(new Vector3(cx-ex,cy-ey,cz-ez)));
-	 
-	    foreach(Vector3 corner in corners) {
+        corners.Add(Camera.main.WorldToScreenPoint(new Vector3(cx , cy , cz)));
+
+        foreach (Vector3 corner in corners) {
 	        GameObject hitObject = WorkManager.FindHitObject(corner);
 	        if(hitObject && hitObject.name != "Ground") {
 	            WorldObject worldObject = hitObject.transform.parent.GetComponent< WorldObject >();

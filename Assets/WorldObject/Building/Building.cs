@@ -16,14 +16,18 @@ public class Building : WorldObject {
 	protected override void Awake() {
 	    base.Awake();
 	    buildQueue = new Queue< string >();
-		float spawnX = selectionBounds.center.x;
-		float spawnZ = selectionBounds.center.z;
-		spawnPoint = new Vector3(spawnX, 0.0f, spawnZ);
-		rallyPoint = spawnPoint;
 	}
+    private void SetSpawnPoint()
+    {
+        float spawnX = selectionBounds.center.x + transform.forward.x * selectionBounds.extents.x + transform.forward.x * 10;
+        float spawnZ = selectionBounds.center.z + transform.forward.z + selectionBounds.extents.z + transform.forward.z * 10;
+        spawnPoint = new Vector3(spawnX, 0.0f, spawnZ);
+        rallyPoint = spawnPoint;
+    }       
 	 
 	protected override void Start () {
 	    base.Start();
+        SetSpawnPoint();
 	}
 	 
 	protected override void Update () {
@@ -68,7 +72,7 @@ public class Building : WorldObject {
 	    if(player) {
 	        RallyPoint flag = player.GetComponentInChildren< RallyPoint >();
 	        if(selected) {
-	            if(flag && player.human && spawnPoint != ResourceManager.InvalidPosition && rallyPoint != ResourceManager.InvalidPosition) {
+	            if(flag && player.human && spawnPoint != ResourceManager.InvalidPosition && rallyPoint != ResourceManager.InvalidPosition && !UnderConstruction()) {
 	                flag.transform.localPosition = rallyPoint;
 	                flag.transform.forward = transform.forward;
 	                flag.Enable();
@@ -135,7 +139,11 @@ public class Building : WorldObject {
 	        needsBuilding = false;
 	        RestoreMaterials();
 	        SetTeamColor();
+            SetSpawnPoint();
+
 	    }
 	}
+
+    public override bool IsActive { get { return !needsBuilding; } }
 }
 	

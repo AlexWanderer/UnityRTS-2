@@ -77,7 +77,7 @@ public class HUD : MonoBehaviour {
 			if(player.SelectedObject.IsOwnedBy(player)) {
 			    //reset slider value if the selected object has changed
 			    if(lastSelection && lastSelection != player.SelectedObject) sliderValue = 0.0f;
-			    	DrawActions(player.SelectedObject.GetActions());
+			    if(player.SelectedObject.IsActive) DrawActions(player.SelectedObject.GetActions());
 			    //store the current selection
 			    lastSelection = player.SelectedObject;
 			    Building selectedBuilding = lastSelection.GetComponent< Building >();
