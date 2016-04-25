@@ -27,13 +27,16 @@ public class HUD : MonoBehaviour {
 	private const int BUILD_IMAGE_PADDING = 8;
 	public Texture2D buildFrame, buildMask;
 
+	public Texture2D smallButtonHover, smallButtonClick;
+	public Texture2D healthy, damaged, critical;
+
 
 	// Use this for initialization
 	void Start () {
 		resourceValues = new Dictionary< ResourceType, int >();
 		resourceLimits = new Dictionary< ResourceType, int >();
 		player = transform.root.GetComponent< Player >();
-		ResourceManager.StoreSelectBoxItems(selectBoxSkin);
+		ResourceManager.StoreSelectBoxItems(selectBoxSkin, healthy, damaged, critical);
 		resourceImages = new Dictionary< ResourceType, Texture2D >();
 		for(int i = 0; i < resources.Length; i++) {
 		    switch(resources[i].name) {
@@ -80,6 +83,7 @@ public class HUD : MonoBehaviour {
 			    Building selectedBuilding = lastSelection.GetComponent< Building >();
 				if(selectedBuilding) {
     				DrawBuildQueue(selectedBuilding.getBuildQueueValues(), selectedBuilding.getBuildPercentage());
+					DrawStandardBuildingOptions(selectedBuilding);
 				}
 			}
 		}
@@ -190,4 +194,27 @@ public class HUD : MonoBehaviour {
 	        GUI.DrawTexture(new Rect(2 * BUILD_IMAGE_PADDING, topPos, width, height), buildMask);
 	    }
 	}
+
+	private void DrawStandardBuildingOptions(Building building) {
+	    GUIStyle buttons = new GUIStyle();
+	    buttons.hover.background = smallButtonHover;
+	    buttons.active.background = smallButtonClick;
+	    GUI.skin.button = buttons;
+	    int leftPos = BUILD_IMAGE_WIDTH + SCROLL_BAR_WIDTH + BUTTON_SPACING;
+	    int topPos = buildAreaHeight - BUILD_IMAGE_HEIGHT / 2;
+	    int width = BUILD_IMAGE_WIDTH / 2;
+	    int height = BUILD_IMAGE_HEIGHT / 2;
+	    /*if(building.hasSpawnPoint()) {
+	        if(GUI.Button(new Rect(leftPos, topPos, width, height), building.rallyPointImage)) {
+	        	leftPos += width + BUTTON_SPACING;
+	        }
+	        if(GUI.Button(new Rect(leftPos, topPos, width, height), building.sellImage)) {
+			    building.Sell();
+			}
+	    }*/
+	    if(GUI.Button(new Rect(leftPos, topPos, width, height), building.sellImage)) {
+			building.Sell();
+		}
+	}
+
 }

@@ -24,6 +24,7 @@ public class UserInput : MonoBehaviour {
 	    	LeftMouseClick();
 	    else if(Input.GetMouseButtonDown(1)) 
 	    	RightMouseClick();
+	    MouseHover();
 	}
 
 	private void MoveCamera() {
@@ -73,27 +74,32 @@ public class UserInput : MonoBehaviour {
 	private void LeftMouseClick() {
 		//Deselect();
 	    if(player.hud.MouseInBounds()) {
-	        GameObject hitObject = FindHitObject();
-	        Vector3 hitPoint = FindHitPoint();
-	        if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
-	            if(player.SelectedObject){ 
-	            	player.SelectedObject.MouseClick(hitObject, hitPoint, player);
-	            }
-	            WorldObject selected = player.SelectedObject;
-	            Deselect();
-	            if(hitObject.name!="Ground") {
-	                WorldObject worldObject = hitObject.transform.parent.GetComponent< WorldObject >();
-	                if(worldObject) {
-	                    //we already know the player has no selected object
-	                    player.SelectedObject = worldObject;
-	                    worldObject.SetSelection(true, player.hud.GetPlayingArea());
-	                }
-	            }
-	            else{
-	            	player.SelectedObject=selected;
-	            	player.SelectedObject.SetSelection(true, player.hud.GetPlayingArea());
-	            }
-	        }
+	    	if(player.IsFindingBuildingLocation()) {
+				if(player.CanPlaceBuilding()) player.StartConstruction();
+			}
+			else{
+		        GameObject hitObject = WorkManager.FindHitObject(Input.mousePosition);
+		        Vector3 hitPoint = WorkManager.FindHitPoint(Input.mousePosition);
+		        if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
+		            if(player.SelectedObject){ 
+		            	player.SelectedObject.MouseClick(hitObject, hitPoint, player);
+		            }
+		            WorldObject selected = player.SelectedObject;
+		            Deselect();
+		            if(hitObject.name!="Ground") {
+		                WorldObject worldObject = hitObject.transform.parent.GetComponent< WorldObject >();
+		                if(worldObject) {
+		                    //we already know the player has no selected object
+		                    player.SelectedObject = worldObject;
+		                    worldObject.SetSelection(true, player.hud.GetPlayingArea());
+		                }
+		            }
+		            else if (selected){
+		            	player.SelectedObject=selected;
+		            	player.SelectedObject.SetSelection(true, player.hud.GetPlayingArea());
+		            }
+		        }
+	    	}
 	    }
 	}
 
@@ -108,20 +114,13 @@ public class UserInput : MonoBehaviour {
 		Deselect();
 	}
 
-	private GameObject FindHitObject() {
-	    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-	    RaycastHit hit;
-	    if(Physics.Raycast(ray, out hit)) 
-	    	return hit.collider.gameObject;
-	    return null;
-	}
 
-	private Vector3 FindHitPoint() {
-	    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-	    RaycastHit hit;
-	    if(Physics.Raycast(ray, out hit)) 
-	    	return hit.point;
-	    return ResourceManager.InvalidPosition;
+	private void MouseHover() {
+	    if(player.hud.MouseInBounds()) {
+	        if(player.IsFindingBuildingLocation()) {
+	            player.FindBuildingLocation();
+	        }
+    	}
 	}
 
 
