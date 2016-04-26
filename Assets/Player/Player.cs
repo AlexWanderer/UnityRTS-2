@@ -51,6 +51,11 @@ public class Player : MonoBehaviour {
 	    return list;
 	}
 
+    public int GetResource(ResourceType type)
+    {
+        return resources[type];
+    }
+
 	private void AddStartResourceLimits() {
 	    IncrementResourceLimit(ResourceType.Money, startMoneyLimit);
 	    IncrementResourceLimit(ResourceType.Power, startPowerLimit);
@@ -76,18 +81,13 @@ public class Player : MonoBehaviour {
 			resources[ResourceType.Money] = resourceLimits[ResourceType.Money];
 	}
 
-	public void AddUnit(string unitName, Vector3 spawnPoint, Quaternion rotation) {
-    	Units units = GetComponentInChildren< Units >();
-		GameObject newUnit = (GameObject)Instantiate(ResourceManager.GetUnit(unitName), spawnPoint, rotation);
-		newUnit.transform.parent = units.transform;
-	}
 
 	public void AddUnit(string unitName, Vector3 spawnPoint, Vector3 rallyPoint, Quaternion rotation, Building creator) {
 	    Units units = GetComponentInChildren< Units >();
 	    GameObject newUnit = (GameObject)Instantiate(ResourceManager.GetUnit(unitName),spawnPoint, rotation);
 	    newUnit.transform.parent = units.transform;
 	    Unit unitObject = newUnit.GetComponent< Unit >();
-	    if(unitObject && spawnPoint != rallyPoint) unitObject.StartMove(rallyPoint);
+        if (unitObject && spawnPoint != rallyPoint) unitObject.StartMove(rallyPoint);
 	    if (unitObject) {
 	 			unitObject.SetBuilding(creator);
 	  			if(spawnPoint != rallyPoint) unitObject.StartMove(rallyPoint);
@@ -96,7 +96,9 @@ public class Player : MonoBehaviour {
 
 	public void CreateBuilding(string buildingName, Vector3 buildPoint, Unit creator, Rect playingArea) {
 	    GameObject newBuilding = (GameObject)Instantiate(ResourceManager.GetBuilding(buildingName), buildPoint, new Quaternion());
-	    tempBuilding = newBuilding.GetComponent< Building >();
+        if(tempBuilding && !tempBuilding.UnderConstruction())
+            Destroy(tempBuilding.gameObject);
+        tempBuilding = newBuilding.GetComponent< Building >();
 	    if (tempBuilding) {
 	        tempCreator = creator;
 	        findingPlacement = true;
@@ -107,7 +109,7 @@ public class Player : MonoBehaviour {
 	}
 
 	public bool IsFindingBuildingLocation() {
-    return findingPlacement;
+        return findingPlacement;
 	}
 	 
 	public void FindBuildingLocation() {
@@ -148,11 +150,10 @@ public class Player : MonoBehaviour {
 	            if(worldObject && placeBounds.Intersects(worldObject.GetSelectionBounds())) canPlace = false;
 	        }
 	    }
-	    return canPlace;
-	}
+        return canPlace && GetResource(ResourceType.Money) > tempBuilding.cost;
+    }
 
 	public void StartConstruction() {
-		Debug.Log("memes");
 	    findingPlacement = false;
 	    Buildings buildings = GetComponentInChildren< Buildings >();
 	    if(buildings) tempBuilding.transform.parent = buildings.transform;

@@ -4,7 +4,7 @@ public class Refinery : Building {
  
     protected override void Start () {
         base.Start();
-        //actions = new string[] {"Harvester"};
+        actions = new string[] {"Worker"};
     }
  
     public override void PerformAction(string actionToPerform) {

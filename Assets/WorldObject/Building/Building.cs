@@ -41,7 +41,12 @@ public class Building : WorldObject {
 	}
 
 	protected void CreateUnit(string unitName) {
-    	buildQueue.Enqueue(unitName);
+        int unitcost=ResourceManager.GetUnit(unitName).GetComponent<Unit>().cost;
+        if (unitcost < player.GetResource(ResourceType.Money))
+        {
+            player.AddResource(ResourceType.Money, -unitcost);
+            buildQueue.Enqueue(unitName);
+        }
 	}
 
 	protected void ProcessBuildQueue() {
@@ -51,7 +56,6 @@ public class Building : WorldObject {
             	if(player) player.AddUnit(buildQueue.Dequeue(), spawnPoint, rallyPoint, transform.rotation, this);
             		currentBuildProgress = 0.0f;
         	}
-        	//if(player) player.AddUnit(buildQueue.Dequeue(), spawnPoint, rallyPoint, transform.rotation);
     	}
 	}
 
@@ -106,17 +110,18 @@ public class Building : WorldObject {
 	}
 
 	public void Sell() {
-		Debug.Log("hello");
 	    if(player) player.AddResource(ResourceType.Money, sellValue);
 	    if(currentlySelected) SetSelection(false, playingArea);
 	    Destroy(this.gameObject);
 	}
 
-	public void StartConstruction() {
-	    CalculateBounds();
-	    needsBuilding = true;
-	    hitPoints = 0;
-	}
+    public void StartConstruction()
+    {
+            CalculateBounds();
+            needsBuilding = true;
+            hitPoints = 0;
+            player.AddResource(ResourceType.Money, -cost);
+    }
 
 	private void DrawBuildProgress() {
 	    GUI.skin = ResourceManager.SelectBoxSkin;
@@ -140,7 +145,6 @@ public class Building : WorldObject {
 	        RestoreMaterials();
 	        SetTeamColor();
             SetSpawnPoint();
-
 	    }
 	}
 

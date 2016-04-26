@@ -35,7 +35,7 @@ public class Unit : WorldObject {
 	}
 
     public override void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller) {
-	    //base.MouseClick(hitObject, hitPoint, controller);
+	    base.MouseClick(hitObject, hitPoint, controller);
 	    //only handle input if owned by a human player and currently selected
 	    if(player && player.human && currentlySelected) {
 	        if(hitObject.name == "Ground" && hitPoint != ResourceManager.InvalidPosition) {
@@ -73,9 +73,14 @@ public class Unit : WorldObject {
 	    }
 	}
 
-	private void MakeMove() {
-	    transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
-	    if(transform.position == destination) moving = false;
-	    CalculateBounds();
-	}
+    private void MakeMove()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
+        if (transform.position == destination)
+        {
+            moving = false;
+            movingIntoPosition = false;
+        }
+        CalculateBounds();
+    }
 }
