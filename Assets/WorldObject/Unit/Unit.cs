@@ -39,6 +39,7 @@ public class Unit : WorldObject {
 	    //only handle input if owned by a human player and currently selected
 	    if(player && player.human && currentlySelected) {
 	        if(hitObject.name == "Ground" && hitPoint != ResourceManager.InvalidPosition) {
+                attacking = false;
 	            float x = hitPoint.x;
 	            //makes sure that the unit stays on top of the surface it is on
 	            float y = hitPoint.y + player.SelectedObject.transform.position.y;

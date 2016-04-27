@@ -13,13 +13,23 @@ public class UserInput : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(player.human) {
-		    MoveCamera();
+		if(player && player.human) {
+            if (Input.GetKeyDown(KeyCode.Escape)) OpenPauseMenu();
+            MoveCamera();
 		    MouseActivity();
 		}
 	}
 
-	private void MouseActivity() {
+    private void OpenPauseMenu()
+    {
+        Time.timeScale = 0.0f;
+        GetComponentInChildren<PauseMenu>().enabled = true;
+        GetComponent<UserInput>().enabled = false;
+        Cursor.visible = true;
+        ResourceManager.MenuOpen = true;
+    }
+
+    private void MouseActivity() {
 	    if(Input.GetMouseButtonDown(0)) 
 	    	LeftMouseClick();
 	    else if(Input.GetMouseButtonDown(1)) 
