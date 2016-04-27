@@ -161,6 +161,7 @@ public class Player : MonoBehaviour {
 	    tempBuilding.SetColliders(true);
 	    tempCreator.SetBuilding(tempBuilding);
 	    tempBuilding.StartConstruction();
+        tempBuilding = null;
 	}
 
 	public void CancelBuildingPlacement() {
