@@ -48,7 +48,7 @@ public class Unit : WorldObject {
 	            StartMove(destination);
 	        }
 	    }
-	}
+    }
 
 	public virtual void StartMove(Vector3 destination) {
 	    this.destination = destination;
