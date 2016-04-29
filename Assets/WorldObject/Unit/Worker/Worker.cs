@@ -37,7 +37,21 @@ public class Worker : Unit {
         currentProject = project;
         Bounds bounds = currentProject.GetSelectionBounds();
         Bounds selfBounds = GetSelectionBounds();
-        Vector3 dest = new Vector3(bounds.center.x - selfBounds.extents.x, 0, bounds.min.z - selfBounds.extents.z);
+        Vector3[] walls = new Vector3[4];
+        walls[0] = new Vector3(bounds.center.x, 0, bounds.min.z - selfBounds.extents.z);
+        walls[1] = new Vector3(bounds.center.x, 0, bounds.max.z + selfBounds.extents.z);
+        walls[2] = new Vector3(bounds.min.x - selfBounds.extents.x, 0, bounds.center.z);
+        walls[3] = new Vector3(bounds.max.x + selfBounds.extents.x, 0, bounds.center.z);
+        Vector3 dest = walls[0];
+        float shortest = Vector3.Distance(walls[0], transform.position);
+        for(int i = 1; i < 4; i++)
+        {
+            float distance = Vector3.Distance(walls[i], transform.position);
+            if(distance < shortest){
+                dest = walls[i];
+                shortest = distance;
+            }
+        }
         StartMove(dest, currentProject.gameObject);
         building = true;
     }
