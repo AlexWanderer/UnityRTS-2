@@ -35,7 +35,10 @@ public class Worker : Unit {
     public override void SetBuilding (Building project) {
         base.SetBuilding (project);
         currentProject = project;
-        StartMove(currentProject.transform.position, currentProject.gameObject);
+        Bounds bounds = currentProject.GetSelectionBounds();
+        Bounds selfBounds = GetSelectionBounds();
+        Vector3 dest = new Vector3(bounds.center.x - selfBounds.extents.x, 0, bounds.min.z - selfBounds.extents.z);
+        StartMove(dest, currentProject.gameObject);
         building = true;
     }
  
