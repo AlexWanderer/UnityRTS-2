@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using RTS;
+using System;
 
 public class Unit : WorldObject {
 	protected bool moving, rotating;
@@ -8,7 +10,9 @@ public class Unit : WorldObject {
 	private Vector3 destination;
 	private Quaternion targetRotation;
 	private GameObject destinationTarget;
+    private Queue<Vector3> path = new Queue<Vector3>();
 	public float moveSpeed, rotateSpeed;
+ 
  
     /*** Game Engine methods, all can be overridden by subclass ***/
  
@@ -21,6 +25,7 @@ public class Unit : WorldObject {
     }
  
     protected override void Update () {
+        Debug.Log(isValidPosition(transform.position));
 	    base.Update();
 	    if(rotating) TurnToTarget();
 	    else if(moving) MakeMove();
@@ -73,6 +78,38 @@ public class Unit : WorldObject {
 	        moving = true;
 	    }
 	}
+    public bool idastar()
+    {
+        float bound = Vector3.Distance(transform.position, destination);
+        float t = 0;
+        while (true)
+        {
+            path.Clear();
+            path.Enqueue(transform.position);
+            t = search( 0, bound);
+            if (t == -1)
+                return true;
+            else if ( t == float.PositiveInfinity)
+                return false;
+            bound = t;
+        }
+    }
+
+    private float search(int v, float bound)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool isValidPosition(Vector3 pos)
+    {
+        Building[] buildings = FindObjectsOfType(typeof(Building)) as Building[];
+        foreach (Building element in buildings)
+        {
+            if (element.GetSelectionBounds().Contains(pos))
+                return false;
+        }
+        return true;
+    }
 
     private void MakeMove()
     {
