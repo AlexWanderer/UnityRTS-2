@@ -8,9 +8,10 @@ public class Unit : WorldObject {
 	protected bool moving, rotating;
 	 
 	private Vector3 destination;
+    private Vector3 pathpoint;
 	private Quaternion targetRotation;
 	private GameObject destinationTarget;
-    private Queue<Vector3> path = new Queue<Vector3>();
+    private Stack<Vector3> path = new Stack<Vector3>();
 	public float moveSpeed, rotateSpeed;
  
  
@@ -56,6 +57,8 @@ public class Unit : WorldObject {
 
 	public virtual void StartMove(Vector3 destination) {
 	    this.destination = destination;
+        idastar();
+        pathpoint = path.Pop();
 	    targetRotation = Quaternion.LookRotation (destination - transform.position);
 	    rotating = true;
 	    moving = false;
@@ -79,24 +82,55 @@ public class Unit : WorldObject {
 	}
     public bool idastar()
     {
+        path.Clear();
         float bound = Vector3.Distance(transform.position, destination);
         float t = 0;
-        while (true)
+        for (int i=0; i<30;i++)
         {
-            path.Clear();
-            path.Enqueue(transform.position);
-            t = search( 0, bound);
-            if (t == -1)
+            t = search(transform.position, 0, bound);
+            if (t == -1.0f)
                 return true;
-            else if ( t == float.PositiveInfinity)
+            else if ( float.IsPositiveInfinity(t))
                 return false;
             bound = t;
         }
+        return false;
     }
 
-    private float search(int v, float bound)
+    private float search(Vector3 node, float g, float bound)
     {
-        throw new NotImplementedException();
+        float f = g + Vector3.Distance(node, destination);
+        if (f > bound)
+            return f;
+        if (isGoal(node)){
+            path.Push(node);
+            return -1;
+        }
+        float min = float.PositiveInfinity;
+        float t;
+        Vector3 successor;
+        for (float i = 0; i<360; i+= 20)
+        {
+            successor = getNextbyAngle(node, i);
+            if (isValidPosition(successor)){
+                t = search(successor, g + .1f, bound);
+                if (t == -1){
+                    path.Push(node);
+                    return -1;
+                }
+                if (t < min)
+                    min = t;
+            }
+        }
+        return min;
+    }
+    private Vector3 getNextbyAngle(Vector3 pos, float angle)
+    {
+        return pos + Quaternion.AngleAxis(angle, Vector3.up) * Vector3.right * .2f;
+    }
+    public bool isGoal(Vector3 pos)
+    {
+        return Vector3.Distance(pos, destination)<1.0;
     }
 
     public bool isValidPosition(Vector3 pos)
@@ -112,8 +146,10 @@ public class Unit : WorldObject {
 
     private void MakeMove()
     {
-        transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
-        if (transform.position == destination)
+        transform.position = Vector3.MoveTowards(transform.position, pathpoint, Time.deltaTime * moveSpeed);
+        if (transform.position == pathpoint)
+            pathpoint = path.Pop();
+        if (isGoal(transform.position))
         {
             moving = false;
             movingIntoPosition = false;
