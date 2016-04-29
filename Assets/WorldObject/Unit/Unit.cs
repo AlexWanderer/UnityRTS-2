@@ -25,7 +25,6 @@ public class Unit : WorldObject {
     }
  
     protected override void Update () {
-        Debug.Log(isValidPosition(transform.position));
 	    base.Update();
 	    if(rotating) TurnToTarget();
 	    else if(moving) MakeMove();
