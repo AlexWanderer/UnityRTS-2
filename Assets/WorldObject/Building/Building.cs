@@ -15,6 +15,7 @@ public class Building : WorldObject {
 
 	protected override void Awake() {
 	    base.Awake();
+        Unit.buildings.Add(this);
 	    buildQueue = new Queue< string >();
 	}
     private void SetSpawnPoint()
