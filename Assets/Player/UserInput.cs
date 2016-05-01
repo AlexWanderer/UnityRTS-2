@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using RTS;
+using System.Collections.Generic;
 
 
 public class UserInput : MonoBehaviour {
@@ -8,7 +9,13 @@ public class UserInput : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		player = transform.root.GetComponent< Player >();
+        for (int i = 0; i < 16; i++)
+            for (int j = 0; j < 16; j++)
+            {
+                if (Unit.buildings[i, j] == null)
+                    Unit.buildings[i, j] = new List<float[]>();
+            }
+        player = transform.root.GetComponent< Player >();
 	}
 	
 	// Update is called once per frame

@@ -12,7 +12,7 @@ public class Unit : WorldObject {
     private Quaternion targetRotation;
     private GameObject destinationTarget;
     private Stack<Vector3> path = new Stack<Vector3>();
-    public static List<Building> buildings = new List<Building>();
+    public static List<float[]>[,] buildings = new List<float[]>[16, 16];
     public static readonly Vector3[] directions = {2*new Vector3(2.5527f, 0, 2.5527f),
                                             2*new Vector3(-2.5527f, 0, -2.5527f),
                                             2*new Vector3(2.5527f, 0, -2.5527f),
@@ -21,22 +21,24 @@ public class Unit : WorldObject {
                                             2*new Vector3(-3.0f, 0, 0),
                                             2*new Vector3(0, 0, 3.0f),
                                             2*new Vector3(0, 0, -3.0f)};
-    public static readonly Vector3[] directions2 = {2*new Vector3(2.5527f, 0, 2.5527f),
-                                            2*new Vector3(-2.5527f, 0, -2.5527f),
-                                            2*new Vector3(2.5527f, 0, -2.5527f),
-                                            2*new Vector3(-2.5527f, 0, 2.5527f),
-                                            2*new Vector3(3.0f, 0, 0),
-                                            2*new Vector3(-3.0f, 0, 0),
-                                            2*new Vector3(0, 0, 3.0f),
-                                            2*new Vector3(0, 0, -3.0f)};
+    public static readonly Vector3[] directions2 = {new Vector3(2.5527f, 0, 2.5527f),
+                                            new Vector3(-2.5527f, 0, -2.5527f),
+                                            new Vector3(2.5527f, 0, -2.5527f),
+                                            new Vector3(-2.5527f, 0, 2.5527f),
+                                            new Vector3(3.0f, 0, 0),
+                                            new Vector3(-3.0f, 0, 0),
+                                            new Vector3(0, 0, 3.0f),
+                                            new Vector3(0, 0, -3.0f)};
 
     private Vector3 goalDirection;
-    private bool validPath;
     public float moveSpeed, rotateSpeed;
+    private float totalExecutionTime = 0.0f;
+    private float isValidExecutionTime = 0.0f;
 
     /*** Game Engine methods, all can be overridden by subclass ***/
 
     protected override void Awake() {
+
         base.Awake();
     }
 
@@ -104,7 +106,7 @@ public class Unit : WorldObject {
         path.Clear();
         float bound = Vector3.Distance(transform.position, destination);
         float t = 0;
-        for (int i = 0; i<300; i++)
+        for (int i = 0; i<200; i++)
         {
             t = search(transform.position, 0, bound);
             if (t == -1.0f)
@@ -117,13 +119,14 @@ public class Unit : WorldObject {
             }
             bound = t;
         }
+        Debug.Log("failed to find path");
         return false;
     }
 
     private float search(Vector3 node, float g, float bound)
     {
         float f = g + Vector3.Distance(node, destination);
-        if (f > bound+.001)
+        if (f > bound+.01)
             return f;
         if (isGoal(node)) {
             path.Push(node);
@@ -182,10 +185,10 @@ public class Unit : WorldObject {
     private List<Vector3> getSuccessors2(Vector3 node)
     {
         List<Vector3> successors = new List<Vector3>(9);
-        successors.Add(node + goalDirection/2);
-        foreach (Vector3 direction in directions)
+        successors.Add(node + goalDirection*.5f);
+        foreach (Vector3 direction in directions2)
         {
-            successors.Add(node + direction/2);
+            successors.Add(node + direction);
         }
         //successors.Add(node + (destination - node).normalized*3.0f);
 
@@ -200,19 +203,14 @@ public class Unit : WorldObject {
     {
         if (pos.x > 80 || pos.x < -80 || pos.z > 80 || pos.z < -80)
             return false;
-        Bounds b;
-        float minx, maxx, minz, maxz;
-        foreach (Building element in buildings)
+        int x = ((int)pos.x)/10+8;
+        int z = ((int)pos.z)/10+8;
+        foreach (float[] bounds2D in buildings[x, z])
         {
-            b = element.GetSelectionBounds();
-            minx = b.min.x;
-            maxx = b.max.x;
-            minz = b.min.z;
-            maxz = b.max.z;
-            if (contains2D(minx, maxx, minz, maxz, pos + new Vector3(1.5f, 0, 1.5f)) ||
-                contains2D(minx, maxx, minz, maxz, pos + new Vector3(-1.5f, 0, 1.5f)) ||
-                contains2D(minx, maxx, minz, maxz, pos + new Vector3(1.5f, 0, -1.5f)) ||
-                contains2D(minx, maxx, minz, maxz, pos + new Vector3(-1.5f, 0, -1.5f)))
+            if (contains2D(bounds2D[0], bounds2D[1], bounds2D[2], bounds2D[3], pos + new Vector3(1.5f, 0, 1.5f))||
+                contains2D(bounds2D[0], bounds2D[1], bounds2D[2], bounds2D[3], pos + new Vector3(-1.5f, 0, -1.5f)) ||
+                contains2D(bounds2D[0], bounds2D[1], bounds2D[2], bounds2D[3], pos + new Vector3(1.5f, 0, -1.5f)) ||
+                contains2D(bounds2D[0], bounds2D[1], bounds2D[2], bounds2D[3], pos + new Vector3(-1.5f, 0, 1.5f)))
                 return false;
         }
         return true;
@@ -235,7 +233,8 @@ public class Unit : WorldObject {
         }
         else if (pathpoint != Vector3.zero)
         {
-            targetRotation = Quaternion.LookRotation(pathpoint - transform.position);
+            if (transform.position!=pathpoint)
+                targetRotation = Quaternion.LookRotation(pathpoint - transform.position);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
             transform.position = Vector3.MoveTowards(transform.position, pathpoint, Time.deltaTime * moveSpeed);
         }

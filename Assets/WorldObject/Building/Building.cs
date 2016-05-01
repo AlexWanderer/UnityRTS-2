@@ -12,11 +12,11 @@ public class Building : WorldObject {
 	public Texture2D rallyPointImage;
 	public Texture2D sellImage;
 	private bool needsBuilding = false;
+    private float[] bounds2D;
 
-	protected override void Awake() {
-	    base.Awake();
-        Unit.buildings.Add(this);
-	    buildQueue = new Queue< string >();
+    protected override void Awake() {
+        base.Awake();
+        buildQueue = new Queue< string >();
 	}
     private void SetSpawnPoint()
     {
@@ -28,6 +28,8 @@ public class Building : WorldObject {
 	 
 	protected override void Start () {
 	    base.Start();
+        if (hitPoints==maxHitPoints)
+            addToBuildings();
         SetSpawnPoint();
 	}
 	 
@@ -116,9 +118,33 @@ public class Building : WorldObject {
 	    Destroy(this.gameObject);
 	}
 
+    public void addToBuildings()
+    {
+        bounds2D = new float[4];
+        bounds2D[0] = selectionBounds.min.x;
+        bounds2D[1] = selectionBounds.max.x;
+        bounds2D[2] = selectionBounds.min.z;
+        bounds2D[3] = selectionBounds.max.z;
+        int x1 = (int)(bounds2D[0] * .1f) + 8;
+        int z1 = (int)(bounds2D[2] * .1f) + 8;
+        int x2 = (int)(bounds2D[1] * .1f) + 8;
+        int z2 = (int)(bounds2D[3] * .1f) + 8;
+        Unit.buildings[x1, z1].Add(bounds2D);
+        if (x1 != x2)
+        {
+            Unit.buildings[x2, z1].Add(bounds2D);
+            if (z1 != z2)
+                Unit.buildings[x2, z2].Add(bounds2D);
+
+        }
+        if (z1 != z2)
+            Unit.buildings[x1, z2].Add(bounds2D);
+    }
+
     public void StartConstruction()
     {
             CalculateBounds();
+            addToBuildings();
             needsBuilding = true;
             hitPoints = 0;
             player.AddResource(ResourceType.Money, -cost);
