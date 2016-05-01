@@ -20,14 +20,15 @@ public class Unit : WorldObject {
                                             2*new Vector3(3.0f, 0, 0),
                                             2*new Vector3(-3.0f, 0, 0),
                                             2*new Vector3(0, 0, 3.0f),
-                                            2*new Vector3(0, 0, -3.0f)/*,
-                                            new Vector3(2.771f, 0, 1.14805f),
-                                            new Vector3(-2.771f, 0, -1.14805f),
-                                            new Vector3(2.771f, 0, -1.14805f),
-                                            new Vector3(-2.771f, 0, 1.14805f),
-                                            new Vector3(1.14805f, 0, 2.771f),
-                                            new Vector3(-1.14805f, 0, -2.771f),
-                                            new Vector3(-1.14805f, 0, 2.771f)*/};
+                                            2*new Vector3(0, 0, -3.0f)};
+    public static readonly Vector3[] directions2 = {2*new Vector3(2.5527f, 0, 2.5527f),
+                                            2*new Vector3(-2.5527f, 0, -2.5527f),
+                                            2*new Vector3(2.5527f, 0, -2.5527f),
+                                            2*new Vector3(-2.5527f, 0, 2.5527f),
+                                            2*new Vector3(3.0f, 0, 0),
+                                            2*new Vector3(-3.0f, 0, 0),
+                                            2*new Vector3(0, 0, 3.0f),
+                                            2*new Vector3(0, 0, -3.0f)};
 
     private Vector3 goalDirection;
     private bool validPath;
@@ -45,8 +46,7 @@ public class Unit : WorldObject {
 
     protected override void Update() {
         base.Update();
-        if (rotating) TurnToTarget();
-        else if (moving) MakeMove();
+        if (moving) MakeMove();
     }
 
     protected override void OnGUI() {
@@ -68,7 +68,8 @@ public class Unit : WorldObject {
                 float y = hitPoint.y + player.SelectedObject.transform.position.y;
                 float z = hitPoint.z;
                 Vector3 destination = new Vector3(x, y, z);
-                StartMove(destination);
+                if (isValidPosition(destination))
+                    StartMove(destination);
             }
         }
     }
@@ -76,11 +77,10 @@ public class Unit : WorldObject {
     public virtual void StartMove(Vector3 destination) {
         this.destination = destination;
         goalDirection = (destination - transform.position).normalized * 6;
-        if ( idastar())
+        if ( idastar() && path.Count>0)
             pathpoint = path.Pop();
         targetRotation = Quaternion.LookRotation(destination - transform.position);
-        rotating = true;
-        moving = false;
+        moving = true;
     }
 
     public void StartMove(Vector3 destination, GameObject destinationTarget) {
@@ -101,7 +101,6 @@ public class Unit : WorldObject {
     }
     public bool idastar()
     {
-        Debug.Log(buildings.Count);
         path.Clear();
         float bound = Vector3.Distance(transform.position, destination);
         float t = 0;
@@ -124,7 +123,7 @@ public class Unit : WorldObject {
     private float search(Vector3 node, float g, float bound)
     {
         float f = g + Vector3.Distance(node, destination);
-        if (f > bound)
+        if (f > bound+.001)
             return f;
         if (isGoal(node)) {
             path.Push(node);
@@ -132,17 +131,36 @@ public class Unit : WorldObject {
         }
         float min = float.PositiveInfinity;
         float t;
-        List<Vector3> successors = getSuccessors(node);
+        List<Vector3> successors;
+        if (bound>20)
+            successors = getSuccessors(node);
+        else
+            successors = getSuccessors2(node);
+        Vector3 midpoint;
         foreach (Vector3 successor in successors)
         {
-            if (isValidPosition(successor)&& isValidPosition((node+successor)/2)) {
-                t = search(successor, g + 6.0f, bound);
-                if (t == -1) {
-                    path.Push(node);
+            midpoint = (node + successor) / 2;
+            if (isValidPosition(midpoint))
+            {
+                if (isValidPosition(successor))
+                {
+                    if (bound>20)
+                        t = search(successor, g + 6.0f, bound);
+                    else
+                        t = search(successor, g + 3.0f, bound);
+                    if (t == -1)
+                    {
+                        path.Push(node);
+                        return -1;
+                    }
+                    if (t < min)
+                        min = t;
+                }
+                else if (isGoal(midpoint))
+                {
+                    path.Push(midpoint);
                     return -1;
                 }
-                if (t < min)
-                    min = t;
             }
         }
         return min;
@@ -160,9 +178,22 @@ public class Unit : WorldObject {
 
         return successors;
     }
+
+    private List<Vector3> getSuccessors2(Vector3 node)
+    {
+        List<Vector3> successors = new List<Vector3>(9);
+        successors.Add(node + goalDirection/2);
+        foreach (Vector3 direction in directions)
+        {
+            successors.Add(node + direction/2);
+        }
+        //successors.Add(node + (destination - node).normalized*3.0f);
+
+        return successors;
+    }
     public bool isGoal(Vector3 pos)
     {
-        return Vector3.Distance(pos, destination) < 3.0f;
+        return Vector3.Distance(pos, destination) < 5.8f;
     }
 
     public bool isValidPosition(Vector3 pos)
@@ -178,10 +209,10 @@ public class Unit : WorldObject {
             maxx = b.max.x;
             minz = b.min.z;
             maxz = b.max.z;
-            if (contains2D(minx, maxx, minz, maxz, pos + new Vector3(1.8f, 0, 1.8f)) ||
-                contains2D(minx, maxx, minz, maxz, pos + new Vector3(-1.8f, 0, 1.8f)) ||
-                contains2D(minx, maxx, minz, maxz, pos + new Vector3(1.8f, 0, -1.8f)) ||
-                contains2D(minx, maxx, minz, maxz, pos + new Vector3(-1.8f, 0, -1.8f)))
+            if (contains2D(minx, maxx, minz, maxz, pos + new Vector3(1.5f, 0, 1.5f)) ||
+                contains2D(minx, maxx, minz, maxz, pos + new Vector3(-1.5f, 0, 1.5f)) ||
+                contains2D(minx, maxx, minz, maxz, pos + new Vector3(1.5f, 0, -1.5f)) ||
+                contains2D(minx, maxx, minz, maxz, pos + new Vector3(-1.5f, 0, -1.5f)))
                 return false;
         }
         return true;
@@ -194,14 +225,20 @@ public class Unit : WorldObject {
 
     private void MakeMove()
     {
-        if ((pathpoint != Vector3.zero&&transform.position == pathpoint))
+        if (path.Count>0&&pathpoint != Vector3.zero&&transform.position == pathpoint)
             pathpoint = path.Pop();
         if (isGoal(transform.position))
         {
+            targetRotation = Quaternion.LookRotation(destination - transform.position);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
             transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
         }
-        else if (pathpoint!=Vector3.zero)
+        else if (pathpoint != Vector3.zero)
+        {
+            targetRotation = Quaternion.LookRotation(pathpoint - transform.position);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
             transform.position = Vector3.MoveTowards(transform.position, pathpoint, Time.deltaTime * moveSpeed);
+        }
         if (transform.position==destination)
         {
             moving = false;
