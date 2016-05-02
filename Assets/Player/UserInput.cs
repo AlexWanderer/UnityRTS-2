@@ -9,12 +9,6 @@ public class UserInput : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        for (int i = 0; i < 16; i++)
-            for (int j = 0; j < 16; j++)
-            {
-                if (Unit.buildings[i, j] == null)
-                    Unit.buildings[i, j] = new List<float[]>();
-            }
         player = transform.root.GetComponent< Player >();
 	}
 	

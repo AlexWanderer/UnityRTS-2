@@ -12,6 +12,7 @@ public class Building : WorldObject {
 	public Texture2D rallyPointImage;
 	public Texture2D sellImage;
 	private bool needsBuilding = false;
+    public bool isDefault = false;
     private float[] bounds2D;
 
     protected override void Awake() {
@@ -28,7 +29,7 @@ public class Building : WorldObject {
 	 
 	protected override void Start () {
 	    base.Start();
-        if (hitPoints==maxHitPoints)
+        if (isDefault)
             addToBuildings();
         SetSpawnPoint();
 	}
@@ -141,6 +142,23 @@ public class Building : WorldObject {
             Unit.buildings[x1, z2].Add(bounds2D);
     }
 
+    public void removeFromBuildings()
+    {
+        int x1 = (int)(bounds2D[0] * .1f) + 8;
+        int z1 = (int)(bounds2D[2] * .1f) + 8;
+        int x2 = (int)(bounds2D[1] * .1f) + 8;
+        int z2 = (int)(bounds2D[3] * .1f) + 8;
+        Unit.buildings[x1, z1].Remove(bounds2D);
+        if (x1 != x2)
+        {
+            Unit.buildings[x2, z1].Remove(bounds2D);
+            if (z1 != z2)
+                Unit.buildings[x2, z2].Remove(bounds2D);
+
+        }
+        if (z1 != z2)
+            Unit.buildings[x1, z2].Remove(bounds2D);
+    }
     public void StartConstruction()
     {
             CalculateBounds();
@@ -148,6 +166,11 @@ public class Building : WorldObject {
             needsBuilding = true;
             hitPoints = 0;
             player.AddResource(ResourceType.Money, -cost);
+    }
+
+    public void OnDestroy()
+    {
+        removeFromBuildings();
     }
 
 	private void DrawBuildProgress() {
@@ -172,7 +195,7 @@ public class Building : WorldObject {
 	        RestoreMaterials();
 	        SetTeamColor();
             SetSpawnPoint();
-	    }
+        }
 	}
 
     public override bool IsActive { get { return !needsBuilding; } }

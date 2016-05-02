@@ -20,7 +20,13 @@ public class Player : MonoBehaviour {
 	public Color teamColor;
 	
 	void Awake() {
-	    resources = InitResourceList();
+        for (int i = 0; i < 16; i++)
+            for (int j = 0; j < 16; j++)
+            {
+                if (Unit.buildings[i, j] == null)
+                    Unit.buildings[i, j] = new List<float[]>();
+            }
+        resources = InitResourceList();
 	    resourceLimits = InitResourceList();
 	}
 
@@ -89,14 +95,14 @@ public class Player : MonoBehaviour {
 	    Unit unitObject = newUnit.GetComponent< Unit >();
         if (unitObject && spawnPoint != rallyPoint) unitObject.StartMove(rallyPoint);
 	    if (unitObject) {
-	 			unitObject.SetBuilding(creator);
+	 			//unitObject.SetBuilding(creator);
 	  			if(spawnPoint != rallyPoint) unitObject.StartMove(rallyPoint);
 	 		} else Destroy(newUnit);
 	}
 
 	public void CreateBuilding(string buildingName, Vector3 buildPoint, Unit creator, Rect playingArea) {
 	    GameObject newBuilding = (GameObject)Instantiate(ResourceManager.GetBuilding(buildingName), buildPoint, new Quaternion());
-        if(tempBuilding && !tempBuilding.UnderConstruction())
+        if (tempBuilding && !tempBuilding.UnderConstruction())
             Destroy(tempBuilding.gameObject);
         tempBuilding = newBuilding.GetComponent< Building >();
 	    if (tempBuilding) {
@@ -161,7 +167,7 @@ public class Player : MonoBehaviour {
 	    tempBuilding.SetColliders(true);
 	    tempCreator.SetBuilding(tempBuilding);
 	    tempBuilding.StartConstruction();
-        tempBuilding = null;
+        //tempBuilding = null;
 	}
 
 	public void CancelBuildingPlacement() {
