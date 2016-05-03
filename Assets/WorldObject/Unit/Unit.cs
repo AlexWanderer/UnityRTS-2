@@ -32,8 +32,6 @@ public class Unit : WorldObject {
 
     private Vector3 goalDirection;
     public float moveSpeed, rotateSpeed;
-    private float totalExecutionTime = 0.0f;
-    private float isValidExecutionTime = 0.0f;
 
     /*** Game Engine methods, all can be overridden by subclass ***/
 
@@ -79,6 +77,7 @@ public class Unit : WorldObject {
     public virtual void StartMove(Vector3 destination) {
         this.destination = destination;
         goalDirection = (destination - transform.position).normalized * 6;
+
         if ( idastar() && path.Count>0)
             pathpoint = path.Pop();
         targetRotation = Quaternion.LookRotation(destination - transform.position);
@@ -225,18 +224,42 @@ public class Unit : WorldObject {
     {
         if (path.Count>0&&pathpoint != Vector3.zero&&transform.position == pathpoint)
             pathpoint = path.Pop();
+        Vector3 newposition;
         if (isGoal(transform.position))
         {
             targetRotation = Quaternion.LookRotation(destination - transform.position);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
-            transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
+            newposition = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
+            if (isValidPosition(destination))
+                transform.position = newposition;
+            else
+            {
+                moving = false;
+                movingIntoPosition = false;
+
+            }
         }
         else if (pathpoint != Vector3.zero)
         {
             if (transform.position!=pathpoint)
                 targetRotation = Quaternion.LookRotation(pathpoint - transform.position);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
-            transform.position = Vector3.MoveTowards(transform.position, pathpoint, Time.deltaTime * moveSpeed);
+            newposition = Vector3.MoveTowards(transform.position, pathpoint, Time.deltaTime * moveSpeed);
+            if (isValidPosition(pathpoint)&& isValidPosition((pathpoint+transform.position)*0.5f))
+                transform.position = newposition;
+            else
+            {
+                if (isValidPosition(destination)&& idastar())
+                {
+                    pathpoint = path.Pop();
+                }
+                else
+                {
+                    moving = false;
+                    movingIntoPosition = false;
+
+                }
+            }
         }
         if (transform.position==destination)
         {

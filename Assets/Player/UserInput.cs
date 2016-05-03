@@ -16,6 +16,7 @@ public class UserInput : MonoBehaviour {
 	void Update () {
 		if(player && player.human) {
             if (Input.GetKeyDown(KeyCode.Escape)) OpenPauseMenu();
+            if (Input.GetKeyDown(KeyCode.Space) && player.IsFindingBuildingLocation()) { player.RotateBuilding(); }
             MoveCamera();
 		    MouseActivity();
 		}

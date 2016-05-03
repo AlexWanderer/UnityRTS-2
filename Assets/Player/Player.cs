@@ -124,6 +124,14 @@ public class Player : MonoBehaviour {
 	    tempBuilding.transform.position = newLocation;
 	}
 
+    public void RotateBuilding()
+    {
+        if (tempBuilding.transform.rotation == Quaternion.identity)
+            tempBuilding.transform.rotation = Quaternion.AngleAxis(-90, new Vector3(0, 1.0f, 0));
+        else
+            tempBuilding.transform.rotation = Quaternion.identity;
+    }
+
 	public bool CanPlaceBuilding() {
 	    bool canPlace = true;
 	 
