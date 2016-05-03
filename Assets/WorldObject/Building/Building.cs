@@ -143,21 +143,23 @@ public class Building : WorldObject {
     }
 
     public void removeFromBuildings()
-    {
-        int x1 = (int)(bounds2D[0] * .1f) + 8;
-        int z1 = (int)(bounds2D[2] * .1f) + 8;
-        int x2 = (int)(bounds2D[1] * .1f) + 8;
-        int z2 = (int)(bounds2D[3] * .1f) + 8;
-        Unit.buildings[x1, z1].Remove(bounds2D);
-        if (x1 != x2)
-        {
-            Unit.buildings[x2, z1].Remove(bounds2D);
-            if (z1 != z2)
-                Unit.buildings[x2, z2].Remove(bounds2D);
+    {	
+    	if(bounds2D !=  null){
+	        int x1 = (int)(bounds2D[0] * .1f) + 8;
+	        int z1 = (int)(bounds2D[2] * .1f) + 8;
+	        int x2 = (int)(bounds2D[1] * .1f) + 8;
+	        int z2 = (int)(bounds2D[3] * .1f) + 8;
+	        Unit.buildings[x1, z1].Remove(bounds2D);
+	        if (x1 != x2)
+	        {
+	            Unit.buildings[x2, z1].Remove(bounds2D);
+	            if (z1 != z2)
+	                Unit.buildings[x2, z2].Remove(bounds2D);
 
+	        }
+	        if (z1 != z2)
+	            Unit.buildings[x1, z2].Remove(bounds2D);
         }
-        if (z1 != z2)
-            Unit.buildings[x1, z2].Remove(bounds2D);
     }
     public void StartConstruction()
     {
