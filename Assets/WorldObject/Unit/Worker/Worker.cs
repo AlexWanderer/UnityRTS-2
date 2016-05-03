@@ -12,7 +12,7 @@ public class Worker : Unit {
  
     protected override void Start () {
         base.Start();
-        actions = new string[] {"Refinery", "WarFactory", "Hangar"};
+        actions = new string[] {"Refinery", "WarFactory", "Hangar", "Airfield"};
     }
  
     protected override void Update () {
