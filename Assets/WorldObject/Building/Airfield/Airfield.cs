@@ -6,7 +6,7 @@ public class Airfield : Building
     protected override void Start()
     {
         base.Start();
-        actions = new string[] { "Tank" };
+        actions = new string[] { "AdvancedAircraft" };
     }
 
     public override void PerformAction(string actionToPerform)

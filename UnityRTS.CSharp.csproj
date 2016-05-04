@@ -81,6 +81,8 @@
     <Compile Include="Assets\WorldObject\Building\WarFactory\WarFactory.cs" />
     <Compile Include="Assets\WorldObject\Projectile.cs" />
     <Compile Include="Assets\WorldObject\TeamColor.cs" />
+    <Compile Include="Assets\WorldObject\Unit\AdvancedAircraft\AdvancedAircraft.cs" />
+    <Compile Include="Assets\WorldObject\Unit\AdvancedAircraft\AdvancedAircraftProjectile.cs" />
     <Compile Include="Assets\WorldObject\Unit\BasicAircraft\BasicAircraft.cs" />
     <Compile Include="Assets\WorldObject\Unit\BasicAircraft\BasicAircraftProjectile.cs" />
     <Compile Include="Assets\WorldObject\Unit\Tank\Tank.cs" />
