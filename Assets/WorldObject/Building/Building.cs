@@ -91,7 +91,7 @@ public class Building : WorldObject {
 	    }
 	}
 
-    public void SetSelectionNoRally(bool selected, Rect playingArena)
+    public void SetSelectionNoRally(bool selected, Rect playingArea)
     {
         base.SetSelection(selected, playingArea);
     }
