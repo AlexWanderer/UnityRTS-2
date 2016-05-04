@@ -91,7 +91,12 @@ public class Building : WorldObject {
 	    }
 	}
 
-	public bool hasSpawnPoint() {
+    public void SetSelectionNoRally(bool selected, Rect playingArena)
+    {
+        base.SetSelection(selected, playingArea);
+    }
+
+	public virtual bool hasSpawnPoint() {
 	    return spawnPoint != ResourceManager.InvalidPosition && rallyPoint != ResourceManager.InvalidPosition;
 	}
 
