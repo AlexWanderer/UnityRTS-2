@@ -65,7 +65,7 @@ public class Unit : WorldObject {
                 attacking = false;
                 float x = hitPoint.x;
                 //makes sure that the unit stays on top of the surface it is on
-                float y = hitPoint.y + player.SelectedObject.transform.position.y;
+                float y = hitPoint.y + transform.position.y;
                 float z = hitPoint.z;
                 Vector3 destination = new Vector3(x, y, z);
                 if (isValidPosition(destination))
@@ -76,7 +76,7 @@ public class Unit : WorldObject {
 
     public virtual void StartMove(Vector3 destination) {
         this.destination = destination;
-        goalDirection = (destination - transform.position).normalized * 6;
+        goalDirection = (destination - transform.position).normalized * 6.0f;
 
         if ( idastar() && path.Count>0)
             pathpoint = path.Pop();
@@ -103,9 +103,9 @@ public class Unit : WorldObject {
     public bool idastar()
     {
         path.Clear();
-        float bound = Vector3.Distance(transform.position, destination);
+        float bound = Vector3.Distance(transform.position, destination)*1.3f;
         float t = 0;
-        for (int i = 0; i<200; i++)
+        for (int i = 0; i<20; i++)
         {
             t = search(transform.position, 0, bound);
             if (t == -1.0f)
@@ -118,6 +118,7 @@ public class Unit : WorldObject {
             }
             bound = t;
         }
+
         Debug.Log("failed to find path");
         return false;
     }

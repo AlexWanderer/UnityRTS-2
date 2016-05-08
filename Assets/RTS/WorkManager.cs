@@ -54,5 +54,14 @@ namespace RTS {
 		    if(Physics.Raycast(ray, out hit)) return hit.point;
 		    return ResourceManager.InvalidPosition;
 		}
+
+        public static Vector3 GroundPoint(Vector3 origin)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(origin);
+            float enter;
+            Plane xz = new Plane(new Vector3(0f, 1f, 0f), 0f);
+            xz.Raycast(ray, out enter);
+            return ray.GetPoint(enter);
+        }
     }
 }

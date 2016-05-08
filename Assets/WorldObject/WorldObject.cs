@@ -190,15 +190,25 @@ public class WorldObject : MonoBehaviour {
     }
 
     private void ChangeSelection(WorldObject worldObject, Player controller) {
-	    //this should be called by the following line, but there is an outside chance it will not
-	    SetSelection(false, playingArea);
-	    if(controller.SelectedObject) 
-	    	controller.SelectedObject.SetSelection(false, playingArea);
-	    controller.SelectedObject = worldObject;
-	    worldObject.SetSelection(true);
+        //this should be called by the following line, but there is an outside chance it will not
+        if (!Input.GetKey(KeyCode.LeftControl))
+        {
+            SetSelection(false, playingArea);
+            controller.SelectedObjects.Remove(this);
+        }
+        if (Input.GetMouseButton(0))
+        {
+            controller.SelectedObjects.Add(worldObject);
+            worldObject.SetSelection(true);
+        }
 	}
 
-	private void DrawSelection() {
+    public void OnDestroy()
+    {
+        player.SelectedObjects.Remove(this);
+    }
+
+    private void DrawSelection() {
 	    GUI.skin = ResourceManager.SelectBoxSkin;
 	    Rect selectBox = WorkManager.CalculateSelectionBox(selectionBounds, playingArea);
 	    //Draw the selection box around the currently selected object, within the bounds of the playing area

@@ -177,6 +177,7 @@ public class Building : WorldObject {
 
     public void OnDestroy()
     {
+        base.OnDestroy();
         removeFromBuildings();
     }
 

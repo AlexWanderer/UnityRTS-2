@@ -72,14 +72,15 @@ public class HUD : MonoBehaviour {
 
 
 	    string selectionName = "";
-		if(player.SelectedObject) {
-		    selectionName = player.SelectedObject.objectName;
-			if(player.SelectedObject.IsOwnedBy(player)) {
+        int count = player.SelectedObjects.Count;
+		if(count>0&&player.SelectedObjects[count-1]) {
+		    selectionName = player.SelectedObjects[count-1].objectName;
+			if(player.SelectedObjects[count-1].IsOwnedBy(player)) {
 			    //reset slider value if the selected object has changed
-			    if(lastSelection && lastSelection != player.SelectedObject) sliderValue = 0.0f;
-			    if(player.SelectedObject.IsActive) DrawActions(player.SelectedObject.GetActions());
+			    if(lastSelection && lastSelection != player.SelectedObjects[count-1]) sliderValue = 0.0f;
+			    if(player.SelectedObjects[count-1].IsActive && count ==1) DrawActions(player.SelectedObjects[count-1].GetActions());
 			    //store the current selection
-			    lastSelection = player.SelectedObject;
+			    lastSelection = player.SelectedObjects[count-1];
 			    Building selectedBuilding = lastSelection.GetComponent< Building >();
 				if(selectedBuilding) {
     				DrawBuildQueue(selectedBuilding.getBuildQueueValues(), selectedBuilding.getBuildPercentage());
@@ -151,7 +152,7 @@ public class HUD : MonoBehaviour {
 	        if(action) {
 	            //create the button and handle the click of that button
 	            if(GUI.Button(pos, action)) {
-	                if(player.SelectedObject) player.SelectedObject.PerformAction(actions[i]);
+	                if(player.SelectedObjects.Count>0) player.SelectedObjects[0].PerformAction(actions[i]);
 	            }
 	        }
 	    }
