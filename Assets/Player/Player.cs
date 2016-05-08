@@ -81,10 +81,10 @@ public class Player : MonoBehaviour {
 	}
 
 	private void GatherResources(){
-		if(resourceLimits[ResourceType.Money] >= resources[ResourceType.Money] + resourceCollectionAmount)
-			AddResource(ResourceType.Money, resourceCollectionAmount);
+		if(resourceLimits[ResourceType.Power] >= resources[ResourceType.Power] + resourceCollectionAmount)
+			AddResource(ResourceType.Power, resourceCollectionAmount);
 		else
-			resources[ResourceType.Money] = resourceLimits[ResourceType.Money];
+			resources[ResourceType.Power] = resourceLimits[ResourceType.Power];
 	}
 
 
