@@ -58,12 +58,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -72,13 +66,18 @@
     <Compile Include="Assets\Menu\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Menu\Scripts\Menu.cs" />
     <Compile Include="Assets\Menu\Scripts\PauseMenu.cs" />
+    <Compile Include="Assets\Menu\Scripts\ResultsScreen.cs" />
     <Compile Include="Assets\Player\HUD\HUD.cs" />
     <Compile Include="Assets\Player\Player.cs" />
     <Compile Include="Assets\Player\RallyPoint\RallyPoint.cs" />
     <Compile Include="Assets\Player\UserInput.cs" />
     <Compile Include="Assets\RTS\ResourceManager.cs" />
     <Compile Include="Assets\RTS\WorkManager.cs" />
+    <Compile Include="Assets\Resources\GameManager.cs" />
     <Compile Include="Assets\Resources\GameObjectList.cs" />
+    <Compile Include="Assets\VictoryConditions\Conquest.cs" />
+    <Compile Include="Assets\VictoryConditions\Survival.cs" />
+    <Compile Include="Assets\VictoryConditions\VictoryCondition.cs" />
     <Compile Include="Assets\WorldObject\Building\Airfield\Airfield.cs" />
     <Compile Include="Assets\WorldObject\Building\Building.cs" />
     <Compile Include="Assets\WorldObject\Building\Buildings.cs" />

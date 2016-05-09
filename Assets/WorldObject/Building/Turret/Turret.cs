@@ -77,8 +77,8 @@ public class Turret : Building
             CalculateBounds();
             //sometimes it gets stuck exactly 180 degrees out in the calculation and does nothing, this check fixes that
             Quaternion inverseAimRotation = new Quaternion(-aimRotation.x, -aimRotation.y, -aimRotation.z, -aimRotation.w);
-            aiming = false;
-            transform.rotation = aimRotation;
+            //aiming = false;
+            //transform.rotation = aimRotation;
             if (transform.rotation == aimRotation || transform.rotation == inverseAimRotation)
             {
                 aiming = false;
