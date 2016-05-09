@@ -7,8 +7,8 @@ public class Projectile : MonoBehaviour
     public float velocity = 1;
     public int damage = 1;
 
-    private float range = 1;
-    private WorldObject target;
+    public float range = 1;
+    public WorldObject target;
 
     void Update()
     {
@@ -39,13 +39,13 @@ public class Projectile : MonoBehaviour
         this.target = target;
     }
 
-    private bool HitSomething()
+    public bool HitSomething()
     {
         if (target && target.GetSelectionBounds().Contains(transform.position)) return true;
         return false;
     }
 
-    private void InflictDamage()
+    public void InflictDamage()
     {
         if (target) target.TakeDamage(damage);
     }

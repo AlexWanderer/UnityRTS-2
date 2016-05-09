@@ -154,7 +154,7 @@ public class WorldObject : MonoBehaviour {
         }
         if (!TargetInRange()) AdjustPosition();
         else if (!TargetInFrontOfWeapon()) AimAtTarget();
-        else if (ReadyToFire()) UseWeapon();
+        if (ReadyToFire()) UseWeapon();
     }
 
     private bool TargetInFrontOfWeapon()
@@ -294,4 +294,9 @@ public class WorldObject : MonoBehaviour {
 	}
 
     public virtual bool IsActive { get { return true; } }
+
+    public Player GetPlayer()
+    {
+        return player;
+    }
 }
