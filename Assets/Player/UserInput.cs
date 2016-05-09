@@ -78,6 +78,11 @@ public class UserInput : MonoBehaviour {
         {
             setSelectedObjects();
             marqueeLeft = Vector3.zero;
+            marqueeRight = Vector3.zero;
+        }
+        else if (Input.GetMouseButtonUp(0)){
+            marqueeLeft = Vector3.zero;
+            marqueeRight = Vector3.zero;
         }
 	    MouseHover();
 	}

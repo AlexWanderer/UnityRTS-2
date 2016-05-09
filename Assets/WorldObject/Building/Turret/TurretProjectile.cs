@@ -9,7 +9,7 @@ public class TurretProjectile : Projectile {
             InflictDamage();
             Destroy(gameObject);
         }
-        if (range > 0)
+        if (range > 0 && target)
         {
             float positionChange = Time.deltaTime * velocity;
             range -= positionChange;

@@ -278,6 +278,7 @@ public class Unit : WorldObject {
     }
 
     protected override void UseWeapon(){
+        base.UseWeapon();
         if(audios.Length > 1 && audios[1] != null && !audios[1].isPlaying){
             audios[1].Play();
         }
