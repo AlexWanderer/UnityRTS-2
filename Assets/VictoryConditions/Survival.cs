@@ -16,7 +16,7 @@ public class Survival : VictoryCondition {
     }
      
     public override string GetDescription () {
-        return "Survival";
+        return "survival";
     }
  
     public override bool GameFinished () {

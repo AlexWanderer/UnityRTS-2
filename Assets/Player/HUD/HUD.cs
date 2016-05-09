@@ -30,9 +30,12 @@ public class HUD : MonoBehaviour {
 	public Texture2D smallButtonHover, smallButtonClick;
 	public Texture2D healthy, damaged, critical;
 
+	private AudioSource sellSound;
+
 
 	// Use this for initialization
 	void Start () {
+		sellSound = GetComponent<AudioSource>();
 		resourceValues = new Dictionary< ResourceType, int >();
 		resourceLimits = new Dictionary< ResourceType, int >();
 		player = transform.root.GetComponent< Player >();
@@ -214,6 +217,7 @@ public class HUD : MonoBehaviour {
 			}
 	    }*/
 	    if(GUI.Button(new Rect(leftPos, topPos, width, height), building.sellImage)) {
+	    	sellSound.Play();
 			building.Sell();
 		}
 	}

@@ -32,21 +32,28 @@ public class Unit : WorldObject {
 
     private Vector3 goalDirection;
     public float moveSpeed, rotateSpeed;
+    protected AudioSource[] audios;
 
     /*** Game Engine methods, all can be overridden by subclass ***/
 
     protected override void Awake() {
-
         base.Awake();
     }
 
     protected override void Start() {
         base.Start();
+        audios = GetComponents<AudioSource>();
     }
 
     protected override void Update() {
         base.Update();
-        if (moving) MakeMove();
+        if (moving){
+            MakeMove();
+            if(!audios[0].isPlaying)
+                audios[0].Play();
+        }else{
+            audios[0].Stop();
+        }
     }
 
     protected override void OnGUI() {
@@ -268,5 +275,11 @@ public class Unit : WorldObject {
             movingIntoPosition = false;
         }
         CalculateBounds();
+    }
+
+    protected override void UseWeapon(){
+        if(audios.Length > 1 && audios[1] != null && !audios[1].isPlaying){
+            audios[1].Play();
+        }
     }
 }

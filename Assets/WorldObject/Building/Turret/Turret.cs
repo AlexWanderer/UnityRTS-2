@@ -11,9 +11,12 @@ public class Turret : Building
     protected List<WorldObject> nearbyObjects;
     private float timeSinceLastDecision = 0.0f, timeBetweenDecisions = 0.05f;
 
+    private AudioSource bombSound;
+
     protected override void Start()
     {
         base.Start();
+        bombSound = GetComponent<AudioSource>();
         //detectionRange = weaponRange;
     }
 
@@ -123,6 +126,8 @@ public class Turret : Building
         Projectile projectile = gameObject.GetComponentInChildren<Projectile>();
         projectile.SetRange(0.9f * weaponRange);
         projectile.SetTarget(target);
+
+        bombSound.Play();
     }
 
     protected override void AimAtTarget()

@@ -203,6 +203,9 @@ public class Building : WorldObject {
 	        RestoreMaterials();
 	        SetTeamColor();
             SetSpawnPoint();
+            AudioSource finishedSound = GetComponentInParent<AudioSource>();
+            if(finishedSound != null)
+            	finishedSound.Play();
         }
 	}
 

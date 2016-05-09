@@ -4,7 +4,7 @@ using System.Collections;
 public class Conquest : VictoryCondition {
      
     public override string GetDescription () {
-        return "Conquest";
+        return "conquest";
     }
  
     public override bool GameFinished () {

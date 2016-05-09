@@ -22,7 +22,7 @@ public class ResultsScreen : MonoBehaviour {
         float topPos = padding;
         GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
         string message = "Game Over";
-        if(winner) message = "Congratulations " + winner.username + "! You have won by " + metVictoryCondition.GetDescription();
+        if(winner) message = "Congratulations! You have won by " + metVictoryCondition.GetDescription();
         GUI.Label(new Rect(leftPos, topPos, Screen.width - 2 * padding, itemHeight), message);
         leftPos = Screen.width / 2 - padding / 2 - buttonWidth;
         topPos += itemHeight + padding;
@@ -30,7 +30,7 @@ public class ResultsScreen : MonoBehaviour {
             //makes sure that the loaded level runs at normal speed
             Time.timeScale = 1.0f;
             ResourceManager.MenuOpen = false;
-            Application.LoadLevel("Map");
+            Application.LoadLevel("Game");
         }
         leftPos += padding + buttonWidth;
         if(GUI.Button(new Rect(leftPos, topPos, buttonWidth, itemHeight), "Main Menu")) {
