@@ -25,6 +25,7 @@ public class HUD : MonoBehaviour {
 	private const int BUTTON_SPACING = 7;
 	private const int SCROLL_BAR_WIDTH = 22;
 	private const int BUILD_IMAGE_PADDING = 8;
+    public float timer = 300.0f;
 	public Texture2D buildFrame, buildMask;
 
 	public Texture2D smallButtonHover, smallButtonClick;
@@ -66,7 +67,13 @@ public class HUD : MonoBehaviour {
 		    DrawOrdersBar();
 		    DrawResourcesBar();
 		}
-	}
+        timer -= Time.deltaTime;
+        if (timer < 0)
+        {
+
+        }
+        GUI.Box(new Rect(Screen.width - TEXT_WIDTH, 0, TEXT_WIDTH, TEXT_HEIGHT), "Time: " + (int)timer);
+    }
 
 	private void DrawOrdersBar() {
 	    GUI.skin = ordersSkin;
