@@ -50,7 +50,7 @@ public class UserInput : MonoBehaviour {
         Texture2D texture = new Texture2D(1, 1);
         color.a = 0.2f;
         texture.SetPixel(0, 0, color);
-        texture.alphaIsTransparency = true;
+        //texture.alphaIsTransparency = true;
         texture.Apply();
         GUI.skin.box.normal.background = texture;
         GUI.Box(position, GUIContent.none);
