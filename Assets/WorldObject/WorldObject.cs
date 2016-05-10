@@ -204,7 +204,8 @@ public class WorldObject : MonoBehaviour {
 
     public void OnDestroy()
     {
-        player.SelectedObjects.Remove(this);
+        if (player)
+            player.SelectedObjects.Remove(this);
     }
 
     private void DrawSelection() {

@@ -70,12 +70,21 @@ public class HUD : MonoBehaviour {
         timer -= Time.deltaTime;
         if (timer < 0)
         {
-
+            OpenPauseMenu();
         }
         GUI.Box(new Rect(Screen.width - TEXT_WIDTH, 0, TEXT_WIDTH, TEXT_HEIGHT), "Time: " + (int)timer);
     }
 
-	private void DrawOrdersBar() {
+    private void OpenPauseMenu()
+    {
+        Time.timeScale = 0.0f;
+        GetComponent<LossMenu>().enabled = true;
+        GetComponentInParent<UserInput>().enabled = false;
+        Cursor.visible = true;
+        ResourceManager.MenuOpen = true;
+    }
+
+    private void DrawOrdersBar() {
 	    GUI.skin = ordersSkin;
 	    GUI.BeginGroup(new Rect(Screen.width - ORDERS_BAR_WIDTH - BUILD_IMAGE_WIDTH, RESOURCE_BAR_HEIGHT, ORDERS_BAR_WIDTH + BUILD_IMAGE_WIDTH, Screen.height - RESOURCE_BAR_HEIGHT));
 		GUI.Box(new Rect(BUILD_IMAGE_WIDTH + SCROLL_BAR_WIDTH, 0, ORDERS_BAR_WIDTH, Screen.height - RESOURCE_BAR_HEIGHT), "");

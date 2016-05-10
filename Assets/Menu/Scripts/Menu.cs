@@ -32,6 +32,8 @@ public class Menu : MonoBehaviour
         //background box
         GUI.Box(new Rect(0, 0, ResourceManager.MenuWidth, menuHeight), "");
 
+        
+
         //menu buttons
         if (buttons != null)
         {
@@ -45,9 +47,14 @@ public class Menu : MonoBehaviour
                     HandleButton(buttons[i]);
                 }
             }
+            topPos += ResourceManager.ButtonHeight + ResourceManager.Padding;
+            SetText(topPos, leftPos);
         }
 
         GUI.EndGroup();
+    }
+
+    protected virtual void SetText(float topPos, float leftPos) {
     }
 
     protected virtual void SetButtons()
