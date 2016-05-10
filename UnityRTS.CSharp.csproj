@@ -63,10 +63,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Menu\Scripts\LossMenu.cs" />
     <Compile Include="Assets\Menu\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Menu\Scripts\Menu.cs" />
     <Compile Include="Assets\Menu\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Menu\Scripts\ResultsScreen.cs" />
+    <Compile Include="Assets\Menu\Scripts\WinMenu.cs" />
     <Compile Include="Assets\Player\HUD\HUD.cs" />
     <Compile Include="Assets\Player\Player.cs" />
     <Compile Include="Assets\Player\RallyPoint\RallyPoint.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Assets\VictoryConditions\Survival.cs" />
     <Compile Include="Assets\VictoryConditions\VictoryCondition.cs" />
     <Compile Include="Assets\WorldObject\Building\Airfield\Airfield.cs" />
+    <Compile Include="Assets\WorldObject\Building\Base\Base.cs" />
     <Compile Include="Assets\WorldObject\Building\Building.cs" />
     <Compile Include="Assets\WorldObject\Building\Buildings.cs" />
     <Compile Include="Assets\WorldObject\Building\Hangar\Hangar.cs" />

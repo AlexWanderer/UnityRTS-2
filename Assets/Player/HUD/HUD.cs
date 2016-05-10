@@ -123,7 +123,7 @@ public class HUD : MonoBehaviour {
 		DrawResourceIcon(ResourceType.Money, iconLeft, textLeft, topPos);
 		iconLeft += TEXT_WIDTH;
 		textLeft += TEXT_WIDTH;
-		DrawResourceIcon(ResourceType.Power, iconLeft, textLeft, topPos);
+		//DrawResourceIcon(ResourceType.Power, iconLeft, textLeft, topPos);
 	    GUI.EndGroup();
 	}
 
