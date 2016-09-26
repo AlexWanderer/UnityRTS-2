@@ -2,7 +2,8 @@
 
 Tech:
 	
-    Singleplayer RTS built in Unity. Focus was on pathfinding, dynamic building placement, and cool tech trees. Originally planned to make it a multiplayer game, but we ran out of time and had to scale back while still trying to maintain a fun experience.
+    Singleplayer RTS built in Unity. Focus was on pathfinding, dynamic building placement, and cool tech trees. 
+    Originally planned to make it a multiplayer game, but we ran out of time and had to scale back while still trying to maintain a fun experience.
 
 Goal:
 	
